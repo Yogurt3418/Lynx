@@ -126,34 +126,25 @@ function init(){
 	var pt4 = new point(2,-1,-1);
 	
 	var pt5 = new point(2,1,-1);
-    //var pt6 = new point(2,-1,-1);4
-    var pt7 = new point(2,1,1);
-	//var pt8 = new point(2,-1,1);3
+    var pt6 = new point(2,1,1);
+    var pt7 = new point(4,-1,1);
+	var pt8 = new point(4,-1,-1);
 	
-	//var pt9 = new point(2,1,-1);5
-    var pt10 = new point(2,1,1);
-    var pt11 = new point(4,-1,1);
-	var pt12 = new point(4,-1,-1);
-	
-	//var pt13 = new point(4,1,-1);1
-    var pt14 = new point(4,-1,-1);
-    //var pt15 = new point(4,1,1);2
-	var pt16 = new point(4,-1,1);
 	
 	var ln1 = new line(pt1,pt2);
 	var ln2 = new line(pt3,pt4);
 	var ln3 = new line(pt5,pt4);
-	var ln4 = new line(pt7,pt3);
+	var ln4 = new line(pt6,pt3);
 	
-	var ln5 = new line(pt5,pt10);
-	var ln6 = new line(pt11,pt12);
-	var ln7 = new line(pt1,pt14);
-	var ln8 = new line(pt2,pt16);
+	var ln5 = new line(pt5,pt6);
+	var ln6 = new line(pt7,pt8);
+	var ln7 = new line(pt1,pt8);
+	var ln8 = new line(pt2,pt7);
 	
-	var ln9 = new line(pt4,pt12);
-	var ln10 = new line(pt3,pt11);
+	var ln9 = new line(pt4,pt8);
+	var ln10 = new line(pt3,pt7);
 	var ln11 = new line(pt5,pt1);
-	var ln12 = new line(pt7,pt2);
+	var ln12 = new line(pt6,pt2);
 	
 	//for now each point must be pushed to a list
 	//points.push(pt1,pt2,pt3,pt4,pt5,pt6,pt7,pt8,camera.pos);
