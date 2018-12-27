@@ -1,0 +1,31 @@
+<html>
+    <head>
+        <title>
+            LYNX Launcher
+        </title>
+    </head>
+
+    <body onload="init();">
+    </body>
+
+    <div>
+        <center><canvas id="3D WORLD" width=480 height="360" bgcolor="#E6E6FA" style="border:1px solid #000000"></canvas></center>
+        <center><canvas id="2D MAP XY Plane" width=400 height="400" bgcolor="#E6E6FA" style="border:1px solid #000000">ENABLE JAVASCRIPT</canvas>
+        <canvas id="2D MAP XZ Plane" width=400 height="400" bgcolor="#E6E6FA" style="border:1px solid #000000">ENABLE JAVASCRIPT</canvas></center>
+    </div>
+
+    <script type="text/javascript" src="engine.js"></script>
+
+    <script type="text/javascript">
+
+        function execute(){
+            
+            init();
+            predraw_setup();
+            pt_calculations();
+            draw_lines();
+            
+        }
+
+   </script>
+</html>
