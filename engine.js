@@ -1,3 +1,5 @@
+
+
 var lines = [];
 
 class point {
@@ -37,9 +39,10 @@ class point {
 
 var camera = {
     
+    //camera starting parameters
     pos : new point(0,0,0),
     center : new point(1000,0,0),
-    dir : 0,
+    dir : 0, //This is broken somewhere below
     fov : 90,
     dep : 1
     
@@ -51,12 +54,13 @@ class line{
         
     }
     
-    get length(){
+    /*get length(){
         
         return 
         
-    }
+    }*/
 }
+
 
 document.addEventListener('keydown', function(event) {
     if(event.keyCode == 87) { //UP 
@@ -71,16 +75,20 @@ document.addEventListener('keydown', function(event) {
     if(event.keyCode == 68) { //RIGHT
         camera.pos.y--;
     }
+    if(event.keyCode == 37) { //Look Left
+        camera.dir--;
+    }
+    if(event.keyCode == 39) { //Look Right
+        camera.dir++;
+    }
     
-    
-    predraw_setup();
+    /*predraw_setup();
     pt_calculations();
     draw_lines();
-    
+    */
 });
 
 
-//init
 function init(){
     
     //Create 8 points 
@@ -125,7 +133,7 @@ function predraw_setup(){
     
     
     clr();
-    clr3d();
+    //clr3d();
     //Draw the x and y axis
     ctx.beginPath();
     ctx.moveTo(w/2,0);  
@@ -135,6 +143,7 @@ function predraw_setup(){
     ctx.lineTo(w,h/2);
     ctx.stroke();
     
+    //Draw x and z axis
     xzp.beginPath();
     xzp.moveTo(wz/2,0);  
     xzp.lineTo(wz/2,hz);
@@ -234,40 +243,52 @@ function pt_calculations(){
 
 function draw_lines(){
     
+    clr3d();
+    
     if (dev_mode == 2){
         ctx.fillText("x : " + Math.round(camera.center.x),10,50);
         ctx.fillText("y : " + Math.round(camera.center.y),10,70);
         ctx.fillText("a : " + camera.dir,10,90);
     }
     
-    for(var i = 0; i < lines.length; i++){
+    var screen_split_h = w3/camera.fov;
+    var screen_split_v = h3/camera.fov;
     
-     
+    var xpoint;
+    var xpoint;
+    var xpoint;
+    
+    //for each line
+    for(var i = 0; i < lines.length; i++){
+        
+        //for each point that makes up this line
         for(var j = 0; j < lines[i].points.length; j++){
             
             
             //calculate where the dots will be drawn on the 2D screen
-            var xpoint = (w/2) + ((w/2)/xmax_2d)*lines[i].points[j].x;
-            var ypoint = (h/2) - ((h/2)/ymax_2d)*lines[i].points[j].y;
-            var zpoint = (h/2) - ((h/2)/zmax_2d)*lines[i].points[j].z;
+            xpoint = (w/2) + ((w/2)/xmax_2d)*lines[i].points[j].x;
+            ypoint = (h/2) - ((h/2)/ymax_2d)*lines[i].points[j].y;
+            zpoint = (h/2) - ((h/2)/zmax_2d)*lines[i].points[j].z;
             
             
             //Display the angle next to the dot
             ctx.fillStyle="#000000";
     		ctx.fillText(" " + Math.round(getDeg(lines[i].points[j].cam_ang_xy)),xpoint,ypoint);
     		
-    		//draw the 2d stuff
-    		//If the dot falls within the FOV color it red
+    		//Draw 2D planes
+    		
+    		//If this point falls within the FOV color it red
             if (Math.abs(getDeg(lines[i].points[j].cam_ang_xy)) <= (camera.fov/2)){
     			ctx.fillStyle="#ff0000";
                 ctx.fillRect(xpoint-3,ypoint-3,10,10);
             }else{
-                //otherwise just color it black
-    			ctx.fillStyle="#000000";
+                //otherwise color it black
+    			//ctx.fillStyle="#000000";
                 ctx.fillRect(xpoint-3,ypoint-3,5,5);
             }
             
             
+            //Do the same as above but in the xz plane view
             xzp.fillStyle="#000000";
     		xzp.fillText(" " + Math.round(getDeg(lines[i].points[j].cam_ang_xz)),xpoint,zpoint);
             
@@ -275,34 +296,44 @@ function draw_lines(){
     			xzp.fillStyle="#ff0000";
                 xzp.fillRect(xpoint-3,zpoint-3,10,10);
             }else{
-                //otherwise just color it black
-    			xzp.fillStyle="#000000";
+                
+    			//xzp.fillStyle="#000000";
                 xzp.fillRect(xpoint-3,zpoint-3,5,5);
             }
             
             
-            var screen_split_h = w3/camera.fov;
-            var screen_split_v = h3/camera.fov;
-            
             //draw 3d stuff
-            if (Math.abs(getDeg(lines[i].points[j].cam_ang_xy)) <= camera.fov/2 && Math.abs(getDeg(lines[i].points[j].cam_ang_xz)) <= camera.fov/2){
+            /*if (Math.abs(getDeg(lines[i].points[j].cam_ang_xy)) <= camera.fov/2 && Math.abs(getDeg(lines[i].points[j].cam_ang_xz)) <= camera.fov/2){
     			
     			x3d.fillStyle="#ff0000";
                 //x3d.fillRect((camera.fov/2)*screen_split + (getDeg(lines[i].points[j].cam_ang_xy)*screen_split),(h3/2),10,10);
     			x3d.fillText(" " + Math.round(getDeg(lines[i].points[j].cam_ang_xy)),(camera.fov/2)*screen_split_h + (getDeg(lines[i].points[j].cam_ang_xy)*screen_split_h),(h3/2));
-    		}
+    		}*/
         }
         
+        //Add a conditional here that doesn't draw lines if they are partly offscreen
         x3d.moveTo((camera.fov/2)*screen_split_h + (getDeg(lines[i].points[0].cam_ang_xy)*screen_split_h), (camera.fov/2)*screen_split_v + (getDeg(lines[i].points[0].cam_ang_xz)*screen_split_v));// (h3/2));
         x3d.lineTo((camera.fov/2)*screen_split_h + (getDeg(lines[i].points[1].cam_ang_xy)*screen_split_h), (camera.fov/2)*screen_split_v + (getDeg(lines[i].points[1].cam_ang_xz)*screen_split_v));// (h3/2));
         x3d.stroke();
     }
     
-    if(dev_mode == 1)
+    if(dev_mode == 1){
         ctx.fillText("Draw_ln Complete!" ,10,60);   
+        ctx.fillText(lines.length + " Lines drawn" ,10,80); 
+        ctx.fillText(lines[0].points.length + " Points" ,10,100); 
+    }
+}
+
+function main(){
+    
+        predraw_setup();
+        pt_calculations();
+        draw_lines();
+
 }
 
 init();
-predraw_setup();
-pt_calculations();
-draw_lines();
+
+window.setInterval(function(){
+    main();
+}, 20);//50FPS 
